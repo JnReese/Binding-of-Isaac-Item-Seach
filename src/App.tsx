@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import styled from "styled-components";
+import SearchBar from "../src/components/SearchBar";
 
 function App() {
+  let logo = require("../src/components/PageImg/BOI.png");
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Logo src={`/PageImg/BOI.png`}></Logo>
+      <SearchBar />
     </div>
   );
 }
 
 export default App;
+
+const Logo = styled.img`
+  height: 250px;
+`;

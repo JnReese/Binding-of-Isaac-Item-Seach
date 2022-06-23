@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 interface PassedSearch {
   searchTerm: string;
   filteredData: FilteredData[];
+  setSearchTerm: (value: string) => void;
 }
 
 export interface FilteredData {
@@ -19,32 +20,34 @@ export interface FilteredData {
   iconPath: string;
 }
 
-export default function MediaControlCard({ searchTerm, filteredData }: PassedSearch) {
+export default function MediaControlCard({ searchTerm, filteredData, setSearchTerm }: PassedSearch) {
   const [arrayOfFavoriteCards, setArrayOfFavoriteCards] = useState<FilteredData[]>([]);
-  const [currentCardName, setCurrentCardName] = useState<string>("");
-  const [nameDeleted, setNameDeleted] = useState<string>("");
-  const [getFavorites, setFavorites] = useState<FilteredData>();
+  const [favoritedCardNames, setFavoritedCardNames] = useState<string[]>([]);
 
   const handleSave = (event: React.MouseEvent<HTMLElement>, item: FilteredData, idx: number) => {
-    setArrayOfFavoriteCards([...arrayOfFavoriteCards, item]);
-    window.localStorage.setItem("favoritedItems", JSON.stringify([...arrayOfFavoriteCards, item]));
-    setCurrentCardName(item.name);
-    if (localStorage.length < 5) {
-      // window.localStorage.setItem(item.name, JSON.stringify(item));
-      setFavorites(item);
+    const noDupeTitle = !favoritedCardNames.includes(item.name);
+    if (arrayOfFavoriteCards.length < 5 && noDupeTitle) {
+      setArrayOfFavoriteCards([...arrayOfFavoriteCards, item]);
+      setFavoritedCardNames([...favoritedCardNames, item.name]);
+      window.localStorage.setItem("favoritedItems", JSON.stringify([...arrayOfFavoriteCards, item]));
     }
-
-    // take saved items.... items / indx ... and reproduce a saved version of the logo and name for favorites
   };
 
   useEffect(() => {
-    if (window.localStorage.getItem("favoritedItems"))
+    if (window.localStorage.getItem("favoritedItems")) {
       setArrayOfFavoriteCards(JSON.parse(window.localStorage.getItem("favoritedItems") ?? ""));
+    }
   }, []);
 
   return (
     <OutsideContainer>
-      <SavedCards setNameDeleted={setNameDeleted} arrayOfFavoriteCards={arrayOfFavoriteCards} />
+      <SavedCards
+        arrayOfFavoriteCards={arrayOfFavoriteCards}
+        setArrayOfFavoriteCards={setArrayOfFavoriteCards}
+        setFavoritedCardNames={setFavoritedCardNames}
+        favoritedCardNames={favoritedCardNames}
+        setSearchTerm={setSearchTerm}
+      />
       <ResultsContainer>
         {searchTerm
           ? filteredData.map((item, idx) => {

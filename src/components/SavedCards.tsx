@@ -8,17 +8,33 @@ import Divider from "@mui/material/Divider";
 import styled from "styled-components";
 import { FilteredData } from "../components/Cards";
 import { TiDelete } from "react-icons/ti";
-import { useState, useEffect } from "react";
 
 type PassedInfo = {
-  setNameDeleted: (string: string) => void;
+  setArrayOfFavoriteCards: ([]) => void;
+  setFavoritedCardNames: ([]) => void;
+  setSearchTerm: (value: string) => void;
   arrayOfFavoriteCards: FilteredData[];
+  favoritedCardNames: string[];
 };
 
-export default function BasicList({ setNameDeleted, arrayOfFavoriteCards }: PassedInfo) {
-  const [numberOfFavoriteCards, setNumberOfFavoriteCards] = useState<number>(0);
-
-  const handleDelete = () => {};
+export default function BasicList({
+  arrayOfFavoriteCards,
+  setArrayOfFavoriteCards,
+  setFavoritedCardNames,
+  favoritedCardNames,
+  setSearchTerm,
+}: PassedInfo) {
+  const handleDelete = (item: FilteredData) => {
+    window.localStorage.setItem(
+      "favoritedItems",
+      JSON.stringify([...arrayOfFavoriteCards].filter((el) => el !== item))
+    );
+    setArrayOfFavoriteCards([...arrayOfFavoriteCards].filter((el) => el !== item));
+    setFavoritedCardNames([...favoritedCardNames].filter((el) => el !== item.name));
+  };
+  const handleFavoriteSelect = (item: FilteredData) => {
+    setSearchTerm(item.name);
+  };
 
   return (
     <Container>
@@ -29,7 +45,7 @@ export default function BasicList({ setNameDeleted, arrayOfFavoriteCards }: Pass
               <ListItemIcon>
                 <img></img>
               </ListItemIcon>
-              <ListItemText primary={`Favorite Cards ${numberOfFavoriteCards} / 5`} />
+              <ListItemText primary={`Favorite Cards ${arrayOfFavoriteCards.length} / 5`} />
             </ListItem>
           </List>
         </nav>
@@ -38,10 +54,12 @@ export default function BasicList({ setNameDeleted, arrayOfFavoriteCards }: Pass
           {arrayOfFavoriteCards.map((item) => (
             <List key={item.name}>
               <ListItem disablePadding>
-                <ListItemButton onClick={() => handleDelete()}>
+                <ListItemButton onClick={() => handleFavoriteSelect(item)}>
                   <ListItemText primary={item.name} />
-                  <TiDelete />
                 </ListItemButton>
+                <Delete onClick={() => handleDelete(item)}>
+                  <TiDelete />
+                </Delete>
               </ListItem>
             </List>
           ))}
@@ -56,4 +74,7 @@ const Container = styled.div`
   top: 0;
   right: 0;
   width: 300px;
+`;
+const Delete = styled.button`
+  margin-right: 1rem;
 `;

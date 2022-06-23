@@ -26,10 +26,18 @@ export default function InputWithIcon() {
   useEffect(() => {
     let hasImg = ItemInfo.filter((item) => item.iconPath !== ".webp");
     let imgExists = hasImg.filter((item) => item.iconPath !== "Wait What?.webp");
-    if (hasImg) {
+    if (imgExists) {
       setCurrentImage(`/images/${imgExists[Math.floor(Math.random() * imgExists.length)].iconPath}`);
     }
   }, []);
+  useEffect(() => {
+    let value = searchTerm.toLowerCase();
+    let result = [];
+    result = ItemInfo.filter((data) => {
+      return data.name.toLowerCase().search(value) != -1;
+    });
+    setFilteredData(result);
+  }, [searchTerm]);
 
   return (
     <Container>
@@ -48,7 +56,7 @@ export default function InputWithIcon() {
             />
           </FormControl>
         </Box>
-        <Cards searchTerm={searchTerm} filteredData={filteredData as FilteredData[]} />
+        <Cards searchTerm={searchTerm} filteredData={filteredData as FilteredData[]} setSearchTerm={setSearchTerm} />
       </SearchResultsContainer>
     </Container>
   );

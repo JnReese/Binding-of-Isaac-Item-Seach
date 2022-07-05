@@ -86,6 +86,11 @@ const ResultsContainer = styled.div`
   grid-column-gap: 25px;
   grid-row-gap: 25px;
   margin: 0 auto;
+  @media (max-width: 1028px) {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+  }
 `;
 const OutsideContainer = styled.div``;
 const Error = styled.div`

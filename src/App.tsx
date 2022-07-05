@@ -17,6 +17,8 @@ export default App;
 const Logo = styled.img`
   height: 250px;
   display: block;
+  width: 344px;
+  object-fit: contain;
   margin: 0 auto;
 `;
 const Title = styled.h1`
@@ -26,4 +28,7 @@ const Title = styled.h1`
   margin: 0 auto;
   top: -74px;
   left: 105px;
+  @media (max-width: 500px) {
+    left: 10px;
+  }
 `;

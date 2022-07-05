@@ -74,6 +74,12 @@ const Container = styled.div`
   top: 0;
   right: 0;
   width: 300px;
+  @media (max-width: 1070px) {
+    position: relative;
+    display: flex;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+  }
 `;
 const Delete = styled.button`
   margin-right: 1rem;
